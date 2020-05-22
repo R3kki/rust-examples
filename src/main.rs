@@ -1,7 +1,9 @@
 mod ownership;
 
 fn main() {
-    println!("Hello, world!");
-    ownership::ownership_example();
-    ownership::vars::vars_example();
+    // ownership::string_example();
+    // ownership::move_string();
+    // ownership::clone_string();
+    ownership::function_example();
+
 }
