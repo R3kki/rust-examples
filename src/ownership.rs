@@ -95,4 +95,3 @@ pub fn function_example() {
         a_string
     } // a_string moves out to the caller
 } // s3 dropped, s2 -> already moved, s1 dropped
-
