@@ -1,6 +1,7 @@
 // mod ownership;
 // mod references;
-mod slice;
+// mod slice;
+mod structs;
 
 fn main() {
     // ownership::string_example();
@@ -16,5 +17,12 @@ fn main() {
     // slice::first_word_independent(&s);
     // slice::first_word_example();
     // slice::slice_parameters();
-    slice::other_slices();
+    // slice::other_slices();
+    // structs::basic_struct();
+    // structs::rectangles();
+    // structs::good_struct();
+    // structs::method_struct();
+    // structs::more_params();
+    structs::associated_functions();
+
 }
