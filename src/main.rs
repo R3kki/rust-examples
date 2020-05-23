@@ -2,7 +2,8 @@
 // mod references;
 // mod slice;
 // mod structs;
-mod enums;
+// mod enums;
+mod packages_crates;
 
 fn main() {
     // ownership::string_example();
@@ -25,6 +26,7 @@ fn main() {
     // structs::method_struct();
     // structs::more_params();
     // structs::associated_functions();
-    enums::pattern_bind();
+    // enums::pattern_bind();
+
 
 }
