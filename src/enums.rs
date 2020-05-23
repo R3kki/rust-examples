@@ -233,7 +233,7 @@ pub fn placeholder() {
 pub fn if_let_example() {
     let some_u8_value = Some(0u8);
     match some_u8_value {
-        Some(3) => println!("three");
+        Some(3) => println!("three"),
         _ => (),
     }
     // want to do something special with 3 but nothing else
