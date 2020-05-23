@@ -1,7 +1,8 @@
 // mod ownership;
 // mod references;
 // mod slice;
-mod structs;
+// mod structs;
+mod enums;
 
 fn main() {
     // ownership::string_example();
@@ -23,6 +24,7 @@ fn main() {
     // structs::good_struct();
     // structs::method_struct();
     // structs::more_params();
-    structs::associated_functions();
+    // structs::associated_functions();
+    enums::pattern_bind();
 
 }
