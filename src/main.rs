@@ -3,7 +3,8 @@
 // mod slice;
 // mod structs;
 // mod enums;
-mod packages_crates;
+// mod packages_crates;
+mod collections;
 
 fn main() {
     // ownership::string_example();
@@ -28,5 +29,20 @@ fn main() {
     // structs::associated_functions();
     // enums::pattern_bind();
 
-
+    // collections::vector::vector_example();
+    // collections::vector::vector_read();
+    // collections::vector::enforces_ownership();
+    // collections::vector::iter_values();
+    // collections::strings::create_string();
+    // collections::strings::update_string();
+    // collections::strings::concat_string();
+    // collections::strings::concat_multiple();
+    // collections::strings::slice_example();
+    // collections::strings::best_slice();
+    // collections::strings::slice_bytes();
+    // collections::hash_maps::itr_collect();
+    // collections::hash_maps::ownership();
+    // collections::hash_maps::accessing_values();
+    // collections::hash_maps::insert_on_no_value();
+    collections::hash_maps::update_on_old_value();
 }
