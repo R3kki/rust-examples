@@ -19,9 +19,56 @@ impl <T: Display> ToString for T {}
 let s = 3.to_string() works because Integers implement `Display`
 
 Traits and Trait bound: able to use generic type parameters
-- compiler checks all the concrete types at compile time
+ -> will not compile// here result has a lifetime creater than its sler checks all the concrete types at compile time
 - so not type checking tests are needed
 
+Lifetime Annotations
+- names must start with ', are usually all lowercase and very short
+Example
+&i32        // reference
+&'a i32     // reference with explicit lifetime
+&'a mut i32 // mutable reference to i32 with lifetime of 'a
+
+- lifetime annotation go in the signature not the body
+- return references with smallest lifetime parameter
+
+- lifetime syntax is about connecting lifetimes of parameters and return types so compiler runs memory-safe op
+(i.e. no dangling pointer)
+
+- every reference has a lifetime
+
+Lifetime Elision Rules
+- rust programmers found patterns that are deterministic and cleaner (less explicit lifetimes ref)
+- set of particular cases that compiler will consider
+
+input lifetimes: on functions, method parameters
+output lifetimes: return values
+
+3 Rules: (if any references unaccounted for, then lifetimes that are not explicit will result in an error)
+1. each reference parameter gets its own lifetime
+    fn foo<'a>(x: &'a i32) -> function with 1 parameter = 1 lifetime parameter
+    fn foo<'a, 'b>(x: &'a i32, y: &'b i32) -> function with 2 parameter = 2 lifetime parameter
+2. if 1 input lifetime parameter exists, all output lifetime parameters will be assigned the same
+    fn foo<'a>(x: &'a i32) -> &'a i32
+3. for methods: if 1 input lifetime parameter is `&self` or `&mut self` -> (b/c method) lifetime of `self` is assigned to all output
+lifetimes (fewer symbols needed)
+
+Example 1: fn first_word(s: &str) -> &str {
+compiler applies the rules:
+#1: fn first_word<'a>(s: &'a str) -> &str {
+#2: fn first_word<'a>(s: &'a str) -> &'a str {
+
+-> now all the references have lifetimes and compiles
+
+Example 2: fn longest(x: &str, y: &str) -> &str {
+#1: fn longest<'a, 'b>(x: &'a str, y: &'a str) -> &str {
+#2: fn longest<'a, 'b>(x: &'a str, y: &'a str) -> &str {
+#3: doesn't apply since not a method and no &self
+-> but return type lifetime missing -> Error
+
+Static Lifetime
+- exists until the end of the program
+- is directly stored in the binary
  */
 
 pub mod remove_duplication {
@@ -400,7 +447,134 @@ pub mod lifetimes {
         let r = &x;
         println!("r is {}", r);
     }
+
     pub fn generic_functions() {
-        use self::super::remove_duplication::generic_data_types;
+        // use self::super::remove_duplication::generic_data_types;
+
+        // Needs a generic lifetime parameter because return type doesn't know if return will be x or y
+        // all ref in the parameters and return type must have the same lifetime
+
+        /*
+        for a lifetime of 'a, two string ref (parameters) will live as long as 'a
+         */
+        fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+            if x.len() > y.len() {
+                x
+            } else {
+                y
+            }
+        }
+
+        // string1 valid until end of block, string2 valid only within the inner block
+        // so result references until the end of the inner scope
+        let string1 = String::from("long string is long");
+
+        {
+            let string2 = String::from("xyz");
+            let result = longest(string1.as_str(), string2.as_str());
+            println!("The longest string is {}", result);
+        }
+        /*
+        Example that won't compile
+        let string1 = String::from("long string is long");
+        let result;
+        {
+            let string2 = String::from("xyz");
+            let result = longest(string1.as_str(), string2.as_str());
+        }
+        // here result has a lifetime creater than its arguments -> will not compile
+        println!("The longest string is {}", result);
+
+
+         */
+    }
+
+    pub fn struct_def() {
+        // Instance of ImportantExcerpt cannot outlive the reference part it holds
+        struct ImportantExcerpt<'a> {
+            part: &'a str,
+        }
+        // first_sentence data is owned by novel, and novel doesn't go out of scope before ImportantExcerpt OK
+        let novel = String::from("Once upon a time. There was a boy.");
+        let first_sentence = novel.split('.').next().expect("Could not find a '.'");
+        let i = ImportantExcerpt {
+            part: first_sentence,
+        };
+    }
+
+    /*
+    pre 1.0 versions, all references would need an explicit lifetime
+
+     */
+    pub fn elision() {
+        // Code compiles without lifetimes
+        // i.e. fn first_word<'a>(s: &'a str) -> &'a str {
+        fn first_word(s: &str) -> &str {
+            let bytes = s.as_bytes();
+
+            for (i, &item) in bytes.iter().enumerate() {
+                if item == b' ' {
+                    return &s[0..i];
+                }
+            }
+
+            &s[..]
+        }
+
+        // Method on a struct with lifetimes, uses same syntax as generics -> often lifetimes annotation not needed
+        fn method() {
+            struct ImportantExcerpt<'a> {
+                part: &'a str,
+            }
+
+            impl<'a> ImportantExcerpt<'a> {
+                // method level, with only parameter &self and no reference return type
+                fn level(&self) -> i32 {
+                    3
+                }
+            }
+            // no explicit lifetimes needed
+            impl<'a> ImportantExcerpt<'a> {
+                fn announce_and_return_part(&self, announcement: &str) -> &str {
+                    println!("Attention please: {}", announcement);
+                    self.part
+                }
+            }
+        }
+
+        // Special case
+        fn static_lifetime() {
+            let s: &'static str = "This is a static lifetime";
+        }
+    }
+}
+
+// Combining generic type parameters, trait bounds, and lifetimes in one function
+pub mod together {
+    /*
+    Longest function
+    - returns the longer of two strings
+    - ann (generic type: T) which can be any type that implements the Display trait (prints out)
+
+     */
+    fn example() {
+        use std::fmt::Display;
+
+        // T is a trait bound, 'a is the lifetime
+        fn longest_with_an_announcement<'a, T>(
+            x: &'a str,
+            y: &'a str,
+            ann: T,
+        ) -> &'a str
+            where
+                T: Display,
+        {
+            println!("Announcement {}", ann);
+            if x.len() > y.len() {
+                x
+            } else {
+                y
+            }
+        }
     }
 }

@@ -56,5 +56,6 @@ fn main() {
     // generics::traits::tweet_example();
     // generics::traits::article_default();
     // generics::traits::default::example();
-    generics::lifetimes::prevent_dangling_ptr();
+    // generics::lifetimes::prevent_dangling_ptr();
+    generics::lifetimes::generic_functions();
 }
