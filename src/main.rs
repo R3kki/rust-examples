@@ -4,7 +4,9 @@
 // mod structs;
 // mod enums;
 // mod packages_crates;
-mod collections;
+// mod collections;
+
+mod generics;
 
 fn main() {
     // ownership::string_example();
@@ -44,5 +46,15 @@ fn main() {
     // collections::hash_maps::ownership();
     // collections::hash_maps::accessing_values();
     // collections::hash_maps::insert_on_no_value();
-    collections::hash_maps::update_on_old_value();
+    // collections::hash_maps::update_on_old_value();
+
+    // generics::remove_duplication::extract_function_example();
+    // generics::remove_duplication::generic_data_types();
+    // generics::struct_def::example();
+    // generics::method_def::example();
+    // generics::method_def::mixup();
+    // generics::traits::tweet_example();
+    // generics::traits::article_default();
+    // generics::traits::default::example();
+    generics::lifetimes::prevent_dangling_ptr();
 }
