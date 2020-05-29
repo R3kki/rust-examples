@@ -389,3 +389,29 @@ pub mod hash_maps {
         println!("{:?}", map);
     }
 }
+
+pub mod exercises {
+    pub mod basic_stats {
+        // given list of integers, return mean, median, mode
+
+        pub fn average(list: &Vec<i32>) -> i32 {
+            let mut total = 0;
+            let mut count = 0;
+
+            for num in list {
+                total += *num;
+                count += 1;
+            }
+
+            let average = total / count;
+            average
+        }
+
+        pub fn output() {
+            let list = vec![4, 5, 2, 3, 1];
+            let average = average(&list);
+
+            println!("average: {}", average);
+        }
+    }
+}
