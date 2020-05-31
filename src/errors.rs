@@ -44,6 +44,22 @@ Propagating Errors
 returning error of function to the calling code (instead of handling error
 within the function code)
 - more control
+
+panic! -> unrecoverable
+    bad state is possible
+    - assumption, guarantee, contract, invariant fails
+    - not expected (not even occasionally)
+    - code relies on good state
+    - no good way to encode type information
+
+Result -> calling code gets options
+    - recoverable or `Err` (unrecoverable)
+    - good default choice when function might fail
+    - when failure is expected (malformed data, rate limit reached)
+
+`unwrap` that panics is a placeholder
+`unwrap` and `expect` : good for prototyping (not robust)
+
  */
 pub fn panic_example() {
     panic!("crash program");
@@ -161,4 +177,49 @@ pub mod recoverable {
     }
 }
 
+pub mod panic_or_not {
+    pub fn guess_number_old() {
+        loop {
+            // --snip--
+
+            let guess: i32 = match guess.trim().parse() {
+                Ok(num) => num,
+                Err(_) => continue,
+            };
+
+            // tedious and impacts performance
+            if guess < 1 || guess > 100 {
+                println!("The secret number will be between 1 and 100.");
+                continue;
+            }
+
+            match guess.cmp(&secret_number) {
+                // --snip--
+            }
+        }
+    }
+    // instead: create new type and validations in a function
+    // instance of type rather than validations multiple times
+    // then safe for functions to use new type
+    pub fn guess_number_new() {
+        pub struct Guess {
+            value: i32,
+        }
+
+        impl Guess {
+            pub fn new(value: i32) -> Guess {
+                if value < 1 || value > 100 {
+                    panic!("Guess value must be between 1 and 100, got {}.", value);
+                }
+
+                Guess { value }
+            }
+
+            // getter
+            pub fn value(&self) -> i32 {
+                self.value
+            }
+        }
+    }
+}
 

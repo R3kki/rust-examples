@@ -5,8 +5,9 @@
 // mod enums;
 // mod packages_crates;
 // mod collections;
-mod errors;
+// mod errors;
 // mod generics;
+mod tests;
 
 fn main() {
     // ownership::string_example();
@@ -54,7 +55,8 @@ fn main() {
     // errors::recoverable::handling_closures();
     // errors::recoverable::unwrap_example();
     // errors::recoverable::expect_example();
-    errors::recoverable::propagating();
+    // errors::recoverable::propagating();
+    // errors::panic_or_not;
 
     // generics::remove_duplication::extract_function_example();
     // generics::remove_duplication::generic_data_types();
