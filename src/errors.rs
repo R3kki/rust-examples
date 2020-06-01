@@ -198,6 +198,7 @@ pub mod panic_or_not {
             }
         }
     }
+
     // instead: create new type and validations in a function
     // instance of type rather than validations multiple times
     // then safe for functions to use new type

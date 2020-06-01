@@ -8,6 +8,7 @@
 // mod errors;
 // mod generics;
 mod tests;
+mod thread_pool;
 
 fn main() {
     // ownership::string_example();
