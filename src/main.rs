@@ -7,8 +7,8 @@
 // mod collections;
 // mod errors;
 // mod generics;
-mod tests;
-mod thread_pool;
+// mod tests;
+mod closures;
 
 fn main() {
     // ownership::string_example();
@@ -68,4 +68,6 @@ fn main() {
     // generics::traits::article_default();
     // generics::traits::default::example();
     // generics::lifetimes::prevent_dangling_ptr();
+
+    closures::main();
 }
