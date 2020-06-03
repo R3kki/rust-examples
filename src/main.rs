@@ -72,5 +72,6 @@ fn main() {
     // closures::main();
     // closures::capture_environment();
     // closures::fn_attempt();
+    closures::move_example();
 
 }

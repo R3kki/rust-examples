@@ -13,6 +13,15 @@
         - (even with the same signature, types are different)
         - `Fn` traits: `Fn`, `FnMut`, `FnOnce`
     - only executes when the value is needed and caches the result then
+
+    Rust infers these traits based on usage
+    - able to override with `move`
+    FnOnce
+        - takes ownership (moves into closure) of variables in enclosing scope
+    FnMut
+        - mutably borrows values
+    Fn
+        - borrows values from environment immutably
  */
 use std::thread;
 use std::time::Duration;
@@ -91,6 +100,7 @@ pub fn error_example() {
     // let n = example_closure(5);
 }
 
+// incurs overhead of storing values from environ
 pub fn capture_environment() {
     let x = 4;
     // able to use var `x` in the same scope as fn definition
@@ -102,13 +112,25 @@ pub fn capture_environment() {
     assert!(equal_to_x(y));
 }
 
-// Error: only works with closures
-pub fn fn_attempt() {
-    let x = 4;
-    fn equal_to_x(z: i32) -> bool {
-        z == x
-    }
+pub fn move_example() {
+    let x = vec![1, 2, 3];
+    let equal_to_x = move |z| z == x;
 
-    let y = 4;
+    // cannot use this println statement
+    // println!("cannot use x here: {:?}", x);
+
+    let y = vec![1, 2, 3];
+
     assert!(equal_to_x(y));
 }
+
+// Error: only works with closures since environment not captured
+// pub fn fn_attempt() {
+//     let x = 4;
+//     fn equal_to_x(z: i32) -> bool {
+//         z == x
+//     }
+//
+//     let y = 4;
+//     assert!(equal_to_x(y));
+// }
