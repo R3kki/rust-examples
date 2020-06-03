@@ -69,5 +69,8 @@ fn main() {
     // generics::traits::default::example();
     // generics::lifetimes::prevent_dangling_ptr();
 
-    closures::main();
+    // closures::main();
+    // closures::capture_environment();
+    // closures::fn_attempt();
+
 }
