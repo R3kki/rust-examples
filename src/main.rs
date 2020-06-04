@@ -74,4 +74,5 @@ fn main() {
     // closures::fn_attempt();
     // closures::move_example();
     // closures::iterators::example();
+    // closures::performance::audio_decoder();
 }

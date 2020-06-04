@@ -248,7 +248,7 @@ pub mod iterators {
         fn using_other_itr_trait_methods() {
             let sum: u32 = Counter::new()
                 .zip(Counter::new().skip(1)) // (5, None) pair is never produced
-                .map(|(a,b)| a * b)
+                .map(|(a, b)| a * b)
                 .filter(|x| x % 3 == 0)
                 .sum();
             assert_eq!(18, sum);
@@ -276,5 +276,30 @@ pub mod iterators {
                 None
             }
         }
+    }
+}
+
+pub mod performance {
+    /*
+    Itr are an example of zero-cost abstractions (and still remains high-level)
+    linear prediction math to estimate future values based on linear fn of prev samples
+    itr chain on 3 variables: `buffer` slice of data, `coefficients` array, `qlp_shift` shift
+     */
+    pub fn audio_decoder() {
+        /*
+
+        let buffer: &mut [i32];
+        let coefficients: [i64; 12];
+        let qlp_shift: i16;
+
+        for i in 12..buffer.len() {
+            let prediction = coefficients.iter()
+                .zip(&buffer[i - 12..i])
+                .map(|(&c, &s)| c * s as i64)
+                .sum::<i64>() >> qlp_shift;
+            let delta = buffer[i];
+            buffer[i] = prediction as i32 + delta;
+        }
+         */
     }
 }
